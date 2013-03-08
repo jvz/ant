@@ -31,6 +31,8 @@ import junit.framework.TestCase;
  * This class provides a number of utility methods for particular build file
  * tests which extend this class.
  *
+ * @deprecated Use BuildFileRule, Assert, AntAssert and JUnit4 annotations to drive tests instead
+ * @see org.apache.tools.ant.BuildFileRule
  */
 public abstract class BuildFileTest extends TestCase {
 
