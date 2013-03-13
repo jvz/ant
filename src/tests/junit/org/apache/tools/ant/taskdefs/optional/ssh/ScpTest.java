@@ -18,12 +18,14 @@
 
 package org.apache.tools.ant.taskdefs.optional.ssh;
 
-import junit.framework.TestCase;
-
-import java.io.*;
-import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;

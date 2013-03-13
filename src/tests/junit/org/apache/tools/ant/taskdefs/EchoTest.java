@@ -18,7 +18,11 @@
 
 package org.apache.tools.ant.taskdefs;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 import junit.framework.TestCase;
 

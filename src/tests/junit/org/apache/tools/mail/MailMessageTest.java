@@ -26,14 +26,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.tools.mail.MailMessage;
-
 import junit.framework.TestCase;
+
+import org.apache.tools.ant.BuildException;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * JUnit 3 testcases for org.apache.tools.mail.MailMessage.
@@ -47,10 +49,7 @@ public class MailMessageTest extends TestCase {
 
     private String local = null;
 
-    public MailMessageTest(String name) {
-        super(name);
-    }
-
+    @Before
     public void setUp() {
         try {
             local = InetAddress.getLocalHost().getHostName();
@@ -64,8 +63,10 @@ public class MailMessageTest extends TestCase {
      *  If this testcase takes >90s to complete, it is very likely that
      *  the two threads are blocked waiting for each other and Thread.join()
      *  timed out.
+     * @throws InterruptedException 
      */
-    public void testAPIExample() {
+    @Test
+    public void testAPIExample() throws InterruptedException {
 
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
@@ -85,12 +86,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail( "InterruptedException: " + ie );
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -121,7 +118,7 @@ public class MailMessageTest extends TestCase {
         "250\r\n" +
         "QUIT\r\n" +
         "221\r\n";
-        for (int icounter = 0; icounter<expectedResult.length(); icounter++) {
+        /*for (int icounter = 0; icounter<expectedResult.length(); icounter++) {
             if (icounter < result.length()) {
                 if (expectedResult.charAt(icounter) != result.charAt(icounter)) {
                     System.out.println("posit " + icounter + " expected "
@@ -137,18 +134,18 @@ public class MailMessageTest extends TestCase {
         if (expectedResult.length()<result.length()) {
             System.out.println("excedent of result "
                 + result.substring(expectedResult.length()));
-        }
+        }*/
         assertEquals(expectedResult.length(), result.length());
         assertEquals(expectedResult, result); // order of headers cannot be guaranteed
-        if (testMailClient.isFailed()) {
-            fail(testMailClient.getFailMessage());
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
     /**
      *  Test a MailMessage with no cc or bcc lines
+     * @throws InterruptedException 
      */
-    public void testToOnly() {
+    @Test
+    public void testToOnly() throws InterruptedException {
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
         server.start();
@@ -164,12 +161,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail("InterruptedException: " + ie);
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -195,16 +188,16 @@ public class MailMessageTest extends TestCase {
         "221\r\n";
         assertEquals(expectedResult.length(), result.length());
         assertEquals(expectedResult, result); // order of headers cannot be guaranteed
-        if (testMailClient.isFailed()) {
-            fail(testMailClient.getFailMessage());
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
 
     /**
      *  Test a MailMessage with no to or bcc lines
+     * @throws InterruptedException 
      */
-    public void testCcOnly() {
+    @Test
+    public void testCcOnly() throws InterruptedException {
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
         server.start();
@@ -220,12 +213,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail( "InterruptedException: " + ie );
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -251,16 +240,16 @@ public class MailMessageTest extends TestCase {
         "221\r\n";
         assertEquals(expectedResult.length(), result.length());
         assertEquals(expectedResult, result);
-        if (testMailClient.isFailed()) {
-            fail(testMailClient.getFailMessage());
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
 
     /**
      *  Test a MailMessage with no to or cc lines
+     * @throws InterruptedException 
      */
-    public void testBccOnly() {
+    @Test
+    public void testBccOnly() throws InterruptedException {
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
         server.start();
@@ -276,12 +265,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail( "InterruptedException: " + ie );
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -306,17 +291,17 @@ public class MailMessageTest extends TestCase {
         "221\r\n";
         assertEquals( expectedResult.length(), result.length() );
         assertEquals( expectedResult, result );
-        if ( testMailClient.isFailed() ) {
-            fail( testMailClient.getFailMessage() );
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
 
     /**
      *  Test a MailMessage with no subject line
      *  Subject is an optional field (RFC 822 s4.1)
+     * @throws InterruptedException 
      */
-    public void testNoSubject() {
+    @Test
+    public void testNoSubject() throws InterruptedException {
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
         server.start();
@@ -331,12 +316,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail( "InterruptedException: " + ie );
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -361,16 +342,16 @@ public class MailMessageTest extends TestCase {
         "221\r\n";
         assertEquals( expectedResult.length(), result.length() );
         assertEquals( expectedResult, result );
-        if ( testMailClient.isFailed() ) {
-            fail( testMailClient.getFailMessage() );
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
 
     /**
      *  Test a MailMessage with empty body message
+     * @throws InterruptedException 
      */
-    public void testEmptyBody() {
+    @Test
+    public void testEmptyBody() throws InterruptedException {
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
         server.start();
@@ -385,12 +366,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail( "InterruptedException: " + ie );
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -415,9 +392,7 @@ public class MailMessageTest extends TestCase {
         "221\r\n";
         assertEquals(expectedResult.length(), result.length());
         assertEquals(expectedResult, result);
-        if (testMailClient.isFailed()) {
-            fail(testMailClient.getFailMessage());
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
 
@@ -425,8 +400,10 @@ public class MailMessageTest extends TestCase {
      *  Test a MailMessage with US-ASCII character set
      *  The next four testcase can be kinda hard to debug as Ant will often
      *  print the junit failure in US-ASCII.
+     * @throws InterruptedException 
      */
-    public void testAsciiCharset() {
+    @Test
+    public void testAsciiCharset() throws InterruptedException {
 
         ServerThread testMailServer = new ServerThread();
         Thread server = new Thread(testMailServer);
@@ -442,12 +419,8 @@ public class MailMessageTest extends TestCase {
         Thread client = new Thread(testMailClient);
         client.start();
 
-        try {
-            server.join(60 * 1000); // 60s
-            client.join(30 * 1000); // a further 30s
-        } catch (InterruptedException ie ) {
-            fail("InterruptedException: " + ie);
-        }
+        server.join(60 * 1000); // 60s
+        client.join(30 * 1000); // a further 30s
 
         String result = testMailServer.getResult();
         String expectedResult = "220 test SMTP EmailTaskTest\r\n" +
@@ -482,9 +455,7 @@ public class MailMessageTest extends TestCase {
             + "in testAsciiCharset()", expectedResult.length(), result.length() );
         assertEquals( "baos1 and baos2 should be the same in testAsciiCharset()",
             baos1.toString(), baos2.toString() ); // order of headers cannot be guaranteed
-        if (testMailClient.isFailed()) {
-            fail(testMailClient.getFailMessage());
-        }
+        assertFalse(testMailClient.getFailMessage(), testMailClient.isFailed());
     }
 
 
@@ -551,7 +522,7 @@ public class MailMessageTest extends TestCase {
 
                 } // while
             } catch (IOException ioe) {
-                fail();
+                throw new BuildException(ioe);
             } finally {
                 disconnect();
             }

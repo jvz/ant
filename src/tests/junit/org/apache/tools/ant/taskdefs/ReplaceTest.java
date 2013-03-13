@@ -18,11 +18,15 @@
 
 package org.apache.tools.ant.taskdefs;
 
-import org.apache.tools.ant.BuildFileTest;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import junit.framework.AssertionFailedError;
+
+import org.apache.tools.ant.BuildFileTest;
 
 /**
  */

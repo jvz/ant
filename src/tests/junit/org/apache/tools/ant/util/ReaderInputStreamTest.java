@@ -17,7 +17,11 @@
  */
 package org.apache.tools.ant.util;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 
 import junit.framework.TestCase;
 

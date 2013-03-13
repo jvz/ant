@@ -18,9 +18,12 @@
 
 package org.apache.tools.ant.taskdefs;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import junit.framework.TestCase;
+
 import org.apache.tools.ant.util.JavaEnvUtils;
-import junit.framework.*;
-import java.io.*;
 
 /**
  * Simple testcase for the ExecuteWatchdog class.
