@@ -31,18 +31,19 @@ import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import junit.framework.TestCase;
-
 import org.apache.tools.ant.BuildException;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * JUnit 3 testcases for org.apache.tools.mail.MailMessage.
  *
  * @since Ant 1.6
  */
-public class MailMessageTest extends TestCase {
+public class MailMessageTest {
 
     // 27224 = magic (a random port which is unlikely to be in use)
     private static int TEST_PORT = 27224;
