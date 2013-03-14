@@ -223,7 +223,7 @@ public class TokenFilterTest {
 
     @Test
     public void testScriptFilter() throws IOException {
-    	Assume.assumeTrue(buildRule.getProject().getTargets().contains("testScriptFilter"));
+    	Assume.assumeTrue("Project does not have 'testScriptFilter' target", buildRule.getProject().getTargets().contains("testScriptFilter"));
 
     	buildRule.executeTarget("scriptfilter");
     	assertContains("HELLO WORLD", getFileString("result/scriptfilter"));
@@ -231,7 +231,7 @@ public class TokenFilterTest {
 
     @Test
     public void testScriptFilter2() throws IOException {
-    	Assume.assumeTrue(buildRule.getProject().getTargets().contains("testScriptFilter"));
+    	Assume.assumeTrue("Project does not have 'testScriptFilter' target", buildRule.getProject().getTargets().contains("testScriptFilter"));
 
         buildRule.executeTarget("scriptfilter2");
     	assertContains("HELLO MOON", getFileString("result/scriptfilter2"));

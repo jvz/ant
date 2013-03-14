@@ -20,7 +20,6 @@ package org.apache.tools.ant.taskdefs.optional.junit;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -62,7 +61,6 @@ public class JUnitTestRunnerTest{
     // check that having no suite generates no errors
     @Test
     public void testNoSuite(){
-    	assumeFalse("Skipped dynamically", true);
         TestRunner runner = createRunner(NoSuiteTestCase.class);
         runner.run();
         assertEquals(runner.getFormatter().getError(), JUnitTestRunner.SUCCESS, runner.getRetCode());
