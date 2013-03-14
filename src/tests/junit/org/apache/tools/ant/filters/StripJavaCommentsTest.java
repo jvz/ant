@@ -21,31 +21,39 @@ package org.apache.tools.ant.filters;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.util.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  */
-public class StripJavaCommentsTest extends BuildFileTest {
+public class StripJavaCommentsTest {
     
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
 
-    public StripJavaCommentsTest(String name) {
-        super(name);
-    }
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
+    @Before
     public void setUp() {
-        configureProject("src/etc/testcases/filters/build.xml");
+        buildRule.configureProject("src/etc/testcases/filters/build.xml");
     }
 
+    @After
     public void tearDown() {
-        executeTarget("cleanup");
+        buildRule.executeTarget("cleanup");
     }
 
+    @Test
     public void testStripJavaComments() throws IOException {
-        executeTarget("testStripJavaComments");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/stripjavacomments.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/stripjavacomments.test");
+        buildRule.executeTarget("testStripJavaComments");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/stripjavacomments.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/stripjavacomments.test");
         assertTrue(FILE_UTILS.contentEquals(expected, result));
     }
 

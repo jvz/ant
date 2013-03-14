@@ -21,110 +21,126 @@ package org.apache.tools.ant.filters;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.util.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /** JUnit Testcases for TailFilter and HeadFilter
  */
 /* I wrote the testcases in one java file because I want also to test the
  * combined behaviour (see end of the class).
 */
-public class HeadTailTest extends BuildFileTest {
+public class HeadTailTest {
 
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
     
-    public HeadTailTest(String name) {
-        super(name);
-    }
-
+    public BuildFileRule buildRule = new BuildFileRule();
+    
+    @Before
     public void setUp() {
-        configureProject("src/etc/testcases/filters/head-tail.xml");
+        buildRule.configureProject("src/etc/testcases/filters/head-tail.xml");
     }
 
+    @After
     public void tearDown() {
-        executeTarget("cleanup");
+        buildRule.executeTarget("cleanup");
     }
 
+    @Test
     public void testHead() throws IOException {
-        executeTarget("testHead");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(), "expected/head-tail.head.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(), "result/head-tail.head.test");
+        buildRule.executeTarget("testHead");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(), "expected/head-tail.head.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(), "result/head-tail.head.test");
         assertTrue("testHead: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testHeadLines() throws IOException {
-        executeTarget("testHeadLines");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(), "expected/head-tail.headLines.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(), "result/head-tail.headLines.test");
+        buildRule.executeTarget("testHeadLines");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(), "expected/head-tail.headLines.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(), "result/head-tail.headLines.test");
         assertTrue("testHeadLines: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testHeadSkip() throws IOException {
-        executeTarget("testHeadSkip");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.headSkip.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.headSkip.test");
+        buildRule.executeTarget("testHeadSkip");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.headSkip.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.headSkip.test");
         assertTrue("testHeadSkip: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testHeadLinesSkip() throws IOException {
-        executeTarget("testHeadLinesSkip");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.headLinesSkip.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.headLinesSkip.test");
+        buildRule.executeTarget("testHeadLinesSkip");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.headLinesSkip.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.headLinesSkip.test");
         assertTrue("testHeadLinesSkip: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testFilterReaderHeadLinesSkip() throws IOException {
-        executeTarget("testFilterReaderHeadLinesSkip");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),
+        buildRule.executeTarget("testFilterReaderHeadLinesSkip");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),
             "expected/head-tail.headLinesSkip.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),
             "result/head-tail.filterReaderHeadLinesSkip.test");
         assertTrue("testFilterReaderHeadLinesSkip: Result not like expected",
                    FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testTail() throws IOException {
-        executeTarget("testTail");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.tail.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.tail.test");
+        buildRule.executeTarget("testTail");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.tail.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.tail.test");
         assertTrue("testTail: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testTailLines() throws IOException {
-        executeTarget("testTailLines");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.tailLines.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.tailLines.test");
+        buildRule.executeTarget("testTailLines");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.tailLines.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.tailLines.test");
         assertTrue("testTailLines: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testTailSkip() throws IOException {
-        executeTarget("testTailSkip");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.tailSkip.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.tailSkip.test");
+        buildRule.executeTarget("testTailSkip");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.tailSkip.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.tailSkip.test");
         assertTrue("testTailSkip: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testTailLinesSkip() throws IOException {
-        executeTarget("testTailLinesSkip");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.tailLinesSkip.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.tailLinesSkip.test");
+        buildRule.executeTarget("testTailLinesSkip");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.tailLinesSkip.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.tailLinesSkip.test");
         assertTrue("testTailLinesSkip: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testFilterReaderTailLinesSkip() throws IOException {
-        executeTarget("testFilterReaderTailLinesSkip");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),
+        buildRule.executeTarget("testFilterReaderTailLinesSkip");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),
             "expected/head-tail.tailLinesSkip.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),
             "result/head-tail.filterReaderTailLinesSkip.test");
         assertTrue("testFilterReaderTailLinesSkip: Result not like expected",
                    FILE_UTILS.contentEquals(expected, result));
     }
 
+    @Test
     public void testHeadTail() throws IOException {
-        executeTarget("testHeadTail");
-        File expected = FILE_UTILS.resolveFile(getProject().getBaseDir(),"expected/head-tail.headtail.test");
-        File result = FILE_UTILS.resolveFile(getProject().getBaseDir(),"result/head-tail.headtail.test");
+        buildRule.executeTarget("testHeadTail");
+        File expected = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"expected/head-tail.headtail.test");
+        File result = FILE_UTILS.resolveFile(buildRule.getProject().getBaseDir(),"result/head-tail.headtail.test");
         assertTrue("testHeadTail: Result not like expected", FILE_UTILS.contentEquals(expected, result));
     }
 
