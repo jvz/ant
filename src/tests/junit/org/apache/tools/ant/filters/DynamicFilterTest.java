@@ -49,7 +49,7 @@ public class DynamicFilterTest {
 
     @Test
     public void testCustomFilter() throws IOException {
-        buildRule.executeTarget("dynamifilter");
+        buildRule.executeTarget("dynamicfilter");
         String content = FileUtilities.getFileContents(buildRule.getProject(), "result/dynamicfilter");
         assertContains("hellO wOrld", content);
     }
