@@ -155,8 +155,8 @@ public class LocatorTest {
             fail("Exception should have been thrown");
         } catch (IllegalArgumentException e) {
             String message = e.getMessage();
-            assertContains(message, Locator.ERROR_NOT_FILE_URI);
-            assertContains(message, url);
+            assertContains(Locator.ERROR_NOT_FILE_URI, message);
+            assertContains(url, message);
         }
     }
 
