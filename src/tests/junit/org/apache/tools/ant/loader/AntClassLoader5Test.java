@@ -21,12 +21,17 @@ package org.apache.tools.ant.loader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
-import junit.framework.TestCase;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.util.CollectionUtils;
+import org.junit.Test;
 
-public class AntClassLoader5Test extends TestCase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+public class AntClassLoader5Test {
 
     /**
      * Asserts that getResources won't return resources that cannot be
@@ -34,6 +39,7 @@ public class AntClassLoader5Test extends TestCase {
      *
      * @see https://issues.apache.org/bugzilla/show_bug.cgi?id=46752
      */
+    @Test
     public void testGetResources() throws IOException {
         AntClassLoader acl = new AntClassLoader5(new EmptyLoader(), null,
                                                  new Path(null), true);
@@ -46,6 +52,7 @@ public class AntClassLoader5Test extends TestCase {
         assertTrue(acl.getResources("META-INF/MANIFEST.MF").hasMoreElements());
     }
 
+    @Test
     public void testGetResourcesUsingFactory() throws IOException {
         AntClassLoader acl =
             AntClassLoader.newAntClassLoader(new EmptyLoader(), null,

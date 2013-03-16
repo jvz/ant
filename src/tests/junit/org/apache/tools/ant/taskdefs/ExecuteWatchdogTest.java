@@ -21,15 +21,20 @@ package org.apache.tools.ant.taskdefs;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import junit.framework.TestCase;
-
 import org.apache.tools.ant.util.JavaEnvUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Simple testcase for the ExecuteWatchdog class.
  *
  */
-public class ExecuteWatchdogTest extends TestCase {
+public class ExecuteWatchdogTest {
 
     private final static long TIME_OUT = 5000;
 
@@ -40,11 +45,8 @@ public class ExecuteWatchdogTest extends TestCase {
 
     private ExecuteWatchdog watchdog;
 
-    public ExecuteWatchdogTest(String name) {
-        super(name);
-    }
-
-    protected void setUp(){
+    @Before
+    public void setUp(){
         watchdog = new ExecuteWatchdog(TIME_OUT);
     }
 
@@ -93,6 +95,7 @@ public class ExecuteWatchdogTest extends TestCase {
         return retcode;
     }
 
+    @Test
     public void testNoTimeOut() throws Exception {
         Process process = getProcess(TIME_OUT/2);
         watchdog.start(process);
@@ -102,6 +105,7 @@ public class ExecuteWatchdogTest extends TestCase {
     }
 
     // test that the watchdog ends the process
+    @Test
     public void testTimeOut() throws Exception {
         Process process = getProcess(TIME_OUT*2);
         long now = System.currentTimeMillis();
@@ -115,6 +119,7 @@ public class ExecuteWatchdogTest extends TestCase {
     }
 
     // test a process that runs and failed
+    @Test
     public void testFailed() throws Exception {
         Process process = getProcess(-1); // process should abort
         watchdog.start(process);
@@ -123,6 +128,7 @@ public class ExecuteWatchdogTest extends TestCase {
         assertTrue("return code is invalid: " + retCode, retCode!=0);
     }
 
+    @Test
     public void testManualStop() throws Exception {
         final Process process = getProcess(TIME_OUT*2);
         watchdog.start(process);
