@@ -40,7 +40,7 @@ public class ResourceListTest {
     }
 
     @After
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         buildRule.executeTarget("tearDown");
     }
 

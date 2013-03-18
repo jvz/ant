@@ -32,12 +32,12 @@ public class TarResourceTest {
     public BuildFileRule buildRule = new BuildFileRule();
 
     @Before
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         buildRule.configureProject("src/etc/testcases/types/resources/tarentry.xml");
     }
 
     @After
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         buildRule.executeTarget("tearDown");
     }
 
