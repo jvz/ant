@@ -27,11 +27,16 @@ import junit.framework.TestCase;
 
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
+import org.junit.Test;
 
-public class LazyResourceCollectionTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+public class LazyResourceCollectionTest {
 
     private class StringResourceCollection implements ResourceCollection {
-        List resources = Arrays.asList(new Resource[] {});
+        List resources = Arrays.<Resource>asList();
 
         List createdIterators = new ArrayList();
 
@@ -70,6 +75,7 @@ public class LazyResourceCollectionTest extends TestCase {
         }
     }
 
+    @Test
     public void testLazyLoading() throws Exception {
         StringResourceCollection collectionTest = new StringResourceCollection();
         LazyResourceCollectionWrapper lazyCollection = new LazyResourceCollectionWrapper();
@@ -102,7 +108,7 @@ public class LazyResourceCollectionTest extends TestCase {
 
         try {
             it.next();
-            fail("NoSuchElementException shoudl have been raised");
+            fail("NoSuchElementException should have been raised");
         } catch (NoSuchElementException e) {
             // ok
         }
@@ -114,6 +120,7 @@ public class LazyResourceCollectionTest extends TestCase {
                 testCollection.createdIterators.size());
     }
 
+    @Test
     public void testCaching() throws Exception {
         StringResourceCollection collectionTest = new StringResourceCollection();
         LazyResourceCollectionWrapper lazyCollection = new LazyResourceCollectionWrapper();

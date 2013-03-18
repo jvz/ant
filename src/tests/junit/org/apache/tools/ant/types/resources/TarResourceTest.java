@@ -17,28 +17,35 @@
  */
 package org.apache.tools.ant.types.resources;
 
-import org.apache.tools.ant.BuildFileTest;
-import org.apache.tools.ant.util.FileUtils;
+import org.apache.tools.ant.BuildFileRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-public class TarResourceTest extends BuildFileTest {
+import static org.apache.tools.ant.FileUtilities.getFileContents;
+import static org.junit.Assert.assertEquals;
 
-    private static final FileUtils FU = FileUtils.getFileUtils();
+public class TarResourceTest {
 
-    public TarResourceTest(String name) {
-        super(name);
-    }
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
+    @Before
     protected void setUp() throws Exception {
-        configureProject("src/etc/testcases/types/resources/tarentry.xml");
+        buildRule.configureProject("src/etc/testcases/types/resources/tarentry.xml");
     }
 
+    @After
     protected void tearDown() throws Exception {
-        executeTarget("tearDown");
+        buildRule.executeTarget("tearDown");
     }
 
+    @Test
     public void testUncompressSource() throws java.io.IOException {
-        executeTarget("uncompressSource");
-        assertTrue(FU.contentEquals(project.resolveFile("../../asf-logo.gif"),
-                                    project.resolveFile("testout/asf-logo.gif")));
+        buildRule.executeTarget("uncompressSource");
+        assertEquals(getFileContents(buildRule.getProject().resolveFile("../../asf-logo.gif")),
+                getFileContents(buildRule.getProject().resolveFile("testout/asf-logo.gif")));
+
     }
 }
