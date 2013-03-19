@@ -113,7 +113,7 @@ public class JavaTest {
             buildRule.executeTarget("testJarAndClassName");
             fail("Build exception should have been thrown - both classname and JAR are not allowed");
         } catch (BuildException ex) {
-            assertEquals("Should not be able to set both classname AND jar", ex.getMessage());
+            assertEquals("Cannot use 'jar' and 'classname' attributes in same command", ex.getMessage());
         }
     }
 
@@ -123,7 +123,7 @@ public class JavaTest {
             buildRule.executeTarget("testClassnameAndJar");
             fail("Build exception should have been thrown - both classname and JAR are not allowed");
         } catch (BuildException ex) {
-            assertEquals("Should not be able to set both classname AND jar", ex.getMessage());
+            assertEquals("Cannot use 'jar' and 'classname' attributes in same command", ex.getMessage());
         }
     }
 
