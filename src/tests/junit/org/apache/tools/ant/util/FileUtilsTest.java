@@ -22,30 +22,36 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.condition.Os;
+import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for org.apache.tools.ant.util.FileUtils.
  *
  */
-public class FileUtilsTest extends TestCase {
+public class FileUtilsTest {
 
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
     private File removeThis;
     private String root;
 
-    public FileUtilsTest(String name) {
-        super(name);
-    }
 
+    @Before
     public void setUp() {
         // Windows adds the drive letter in uppercase, unless you run Cygwin
         root = new File(File.separator).getAbsolutePath().toUpperCase();
     }
 
+    @After
     public void tearDown() {
         if (removeThis != null && removeThis.exists()) {
             if (!removeThis.delete())
@@ -65,6 +71,7 @@ public class FileUtilsTest extends TestCase {
      * @see FileUtils#setFileLastModified(java.io.File, long)
      * @throws IOException
      */
+    @Test
     public void testSetLastModified() throws IOException {
         removeThis = new File("dummy");
         FileOutputStream fos = new FileOutputStream(removeThis);
@@ -104,6 +111,7 @@ public class FileUtilsTest extends TestCase {
         assertTrue(thirdModTime != secondModTime);
     }
 
+    @Test
     public void testResolveFile() {
         if (!(Os.isFamily("dos") || Os.isFamily("netware"))) {
             /*
@@ -203,6 +211,7 @@ public class FileUtilsTest extends TestCase {
 
     }
 
+    @Test
     public void testNormalize() {
         if (!(Os.isFamily("dos") || Os.isFamily("netware"))) {
             /*
@@ -324,6 +333,7 @@ public class FileUtilsTest extends TestCase {
     /**
      * Test handling of null arguments.
      */
+    @Test
     public void testNullArgs() {
         try {
             FILE_UTILS.normalize(null);
@@ -340,6 +350,7 @@ public class FileUtilsTest extends TestCase {
     /**
      * Test createTempFile
      */
+    @Test
     public void testCreateTempFile()
     {
         // null parent dir
@@ -391,6 +402,7 @@ public class FileUtilsTest extends TestCase {
     /**
      * Test contentEquals
      */
+    @Test
     public void testContentEquals() throws IOException {
         assertTrue("Non existing files", FILE_UTILS.contentEquals(new File(System.getProperty("root"), "foo"),
                                                           new File(System.getProperty("root"), "bar")));
@@ -409,6 +421,7 @@ public class FileUtilsTest extends TestCase {
     /**
      * Test createNewFile
      */
+    @Test
     public void testCreateNewFile() throws IOException {
         removeThis = new File("dummy");
         assertTrue(!removeThis.exists());
@@ -419,6 +432,7 @@ public class FileUtilsTest extends TestCase {
     /**
      * Test removeLeadingPath.
      */
+    @Test
     public void testRemoveLeadingPath() {
         assertEquals("bar", FILE_UTILS.removeLeadingPath(new File("/foo"),
                                                  new File("/foo/bar")));
@@ -465,8 +479,9 @@ public class FileUtilsTest extends TestCase {
     /**
      * test toUri
      */
+    @Test
     public void testToURI() {
-        String dosRoot = null;
+        String dosRoot;
         if (Os.isFamily("dos") || Os.isFamily("netware")) {
             dosRoot = System.getProperty("user.dir")
                 .substring(0, 3).replace(File.separatorChar, '/');
@@ -513,17 +528,19 @@ public class FileUtilsTest extends TestCase {
         }
     }
 
+    @Test
     public void testIsContextRelativePath() {
-        if (Os.isFamily("dos")) {
-            assertTrue(FileUtils.isContextRelativePath("/\u00E4nt"));
-            assertTrue(FileUtils.isContextRelativePath("\\foo"));
-        }
+        Assume.assumeTrue("Test only runs on DOS", Os.isFamily("dos"));
+        assertTrue(FileUtils.isContextRelativePath("/\u00E4nt"));
+        assertTrue(FileUtils.isContextRelativePath("\\foo"));
     }
+
     /**
      * test fromUri
      */
+    @Test
     public void testFromURI() {
-        String dosRoot = null;
+        String dosRoot;
         if (Os.isFamily("dos") || Os.isFamily("netware")) {
             dosRoot = System.getProperty("user.dir").substring(0, 2);
         } else {
@@ -542,6 +559,7 @@ public class FileUtilsTest extends TestCase {
         assertEquals(dosRoot + File.separator + "foo#bar", FILE_UTILS.fromURI("file:///foo%23bar"));
     }
 
+    @Test
     public void testModificationTests() {
 
         //get a time
@@ -564,6 +582,7 @@ public class FileUtilsTest extends TestCase {
                 !FILE_UTILS.isUpToDate(firstTime,-1L));
     }
 
+    @Test
     public void testHasErrorInCase() {
         File tempFolder = new File(System.getProperty("java.io.tmpdir"));
         File wellcased = FILE_UTILS.createTempFile("alpha", "beta", tempFolder,
