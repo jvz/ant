@@ -166,7 +166,7 @@ public class JavaTest {
 
     @Test
     public void testExcepting() {
-        buildRule.executeTarget("testExpecting");
+        buildRule.executeTarget("testExcepting");
         assertContains("Exception raised inside called program", buildRule.getLog());
     }
 
