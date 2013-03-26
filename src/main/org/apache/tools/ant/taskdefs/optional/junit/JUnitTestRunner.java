@@ -30,6 +30,7 @@ import java.io.PrintStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -38,6 +39,7 @@ import java.util.Vector;
 import junit.framework.AssertionFailedError;
 import junit.framework.JUnit4TestAdapterCache;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestFailure;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
@@ -462,6 +464,13 @@ public class JUnitTestRunner implements TestListener, JUnitTaskMirror.JUnitTestR
                     }
                     junit4 = junit4TestAdapterClass != null;
 
+                    if (junitTest.isSkipNonTests()) {
+                       if (!containsTests( testClass, junit4)) {
+                           return;
+                       }
+                    }
+
+
                     if (junit4) {
                         // Let's use it!
                         Class[] formalParams;
@@ -560,6 +569,48 @@ public class JUnitTestRunner implements TestListener, JUnitTaskMirror.JUnitTestR
         } else if (junitTest.failureCount() != 0) {
             retCode = FAILURES;
         }
+    }
+
+    private static boolean containsTests(Class<?> testClass, boolean isJUnit4) {
+        Class testAnnotation = null;
+        try {
+            testAnnotation = Class.forName("org.junit.Test");
+        } catch (ClassNotFoundException e) {
+            if (isJUnit4) {
+                // odd - we think we're JUnit4 but don't support the test annotation. We therefore can't have any tests!
+                return false;
+            }
+            // else... we're a JUnit3 test and don't need the annotation
+        }
+        if (!isJUnit4 && !TestCase.class.isAssignableFrom(testClass)) {
+            //a test we think is JUnit3 but does not extend TestCase. Can't really be a test.
+            return false;
+        }
+
+        if (Modifier.isAbstract(testClass.getModifiers()) || Modifier.isInterface(testClass.getModifiers())) {
+            for (Class<?> innerClass : testClass.getDeclaredClasses()) {
+                if (containsTests(innerClass, isJUnit4) || containsTests(innerClass, !isJUnit4)) {
+                    return true;
+                }
+            }
+            // can't instantiate class and no inner classes are tests either
+            return false;
+        }
+        for (Method m : testClass.getMethods()) {
+            if (isJUnit4) {
+                if (m.getAnnotation(testAnnotation) != null) {
+                    return true;
+                }
+            } else {
+                if (m.getName().startsWith("test") && m.getParameterTypes().length == 0
+                        && (Modifier.isProtected(m.getModifiers()) || Modifier.isPublic(m.getModifiers()))) {
+                    return true;
+                }
+            }
+        }
+
+        // no test methods found
+        return false;
     }
 
     /**
@@ -791,6 +842,7 @@ public class JUnitTestRunner implements TestListener, JUnitTaskMirror.JUnitTestR
         boolean outputToFormat = true;
         boolean logFailedTests = true;
         boolean logTestListenerEvents = false;
+        boolean skipNonTests = false;
 
 
         if (args.length == 0) {
@@ -844,6 +896,9 @@ public class JUnitTestRunner implements TestListener, JUnitTaskMirror.JUnitTestR
             } else if (args[i].startsWith(Constants.LOG_FAILED_TESTS)) {
                 logFailedTests = Project.toBoolean(
                     args[i].substring(Constants.LOG_FAILED_TESTS.length()));
+            } else if (args[i].startsWith(Constants.SKIP_NON_TESTS)) {
+                skipNonTests = Project.toBoolean(
+                    args[i].substring(Constants.SKIP_NON_TESTS.length()));
             }
         }
 
@@ -883,6 +938,7 @@ public class JUnitTestRunner implements TestListener, JUnitTaskMirror.JUnitTestR
                     t.setTodir(new File(st.nextToken()));
                     t.setOutfile(st.nextToken());
                     t.setProperties(props);
+                    t.setSkipNonTests(skipNonTests);
                     code = launch(t, testMethodNames, haltError, stackfilter, haltFail,
                                   showOut, outputToFormat,
                                   logTestListenerEvents);
@@ -910,6 +966,7 @@ public class JUnitTestRunner implements TestListener, JUnitTaskMirror.JUnitTestR
         } else {
             JUnitTest t = new JUnitTest(args[0]);
             t.setProperties(props);
+            t.setSkipNonTests(skipNonTests);
             returnCode = launch(
                 t, methods, haltError, stackfilter, haltFail,
                 showOut, outputToFormat, logTestListenerEvents);

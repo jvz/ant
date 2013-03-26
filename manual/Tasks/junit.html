@@ -526,6 +526,11 @@ the name of the resulting class (without suffix). It defaults to <i>java-tmp-dir
     <td valign="top">Only run test <a href="../properties.html#if+unless">if the named property is <b>not</b> set</a>.</td>
     <td align="center" valign="top">No</td>
   </tr>
+  <tr>
+    <td valign="top">skipNonTests</td>
+    <td valign="top">Do not pass this class to the JUnit runner if it does not contain any JUnit tests. This prevents non tests from appearing as test errors in test results.</td>
+    <td align="center" valign="top">No. Default is false.</td>
+  </tr>
 </table>
 
 <p>Tests can define their own formatters via nested
@@ -604,6 +609,11 @@ supported.</p>
     <td valign="top">Only run tests <a href="../properties.html#if+unless">if the named property is <strong>not</strong> set</a>.</td>
     <td align="center" valign="top">No</td>
   </tr>
+  <tr>
+      <td valign="top">skipNonTests</td>
+      <td valign="top">Do not pass any classes that do not contain JUnit tests to the test runner. This prevents non tests from appearing as test errors in test results.</td>
+      <td align="center" valign="top">No. Default is false.</td>
+  </tr>
 </table>
 
 <p>Batchtests can define their own formatters via nested
@@ -649,7 +659,7 @@ supported.</p>
 
 <p>to your <code>junit</code> task.</p>
 
-<h3><a name="enabletestlistenerevents"><code>ant.junit.enabletestlistenerevents</a>
+<h3><a name="enabletestlistenerevents"><code>ant.junit.enabletestlistenerevents</code></a>
   magic property</h3>
 
 <p><em>Since Ant 1.8.2</em> the <code>enableTestListenerEvents</code>
