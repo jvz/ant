@@ -343,6 +343,7 @@ public class JUnitTaskTest extends BuildFileTest {
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractJUnit3TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestNotMissed.xml").isExists());
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestNotMissed.xml").isExists());
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3TestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestWithSuiteNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestWithSuiteNotMissed.xml").isExists());
 
         executeTarget("testNonTestsRun");
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.NonTestMissed.xml").isExists());
@@ -353,6 +354,7 @@ public class JUnitTaskTest extends BuildFileTest {
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractTestNotMissed.xml").isExists());
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractJUnit3TestMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestMissed.xml").isExists());
         assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3NonTestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestWithSuiteNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestWithSuiteNotMissed.xml").isExists());
 
     }
 
