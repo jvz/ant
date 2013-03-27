@@ -17,7 +17,9 @@
  */
 package org.example.junit;
 
-public abstract class AbstractJUnit3TestMissed {
+import junit.framework.TestCase;
+
+public abstract class AbstractJUnit3TestMissed extends TestCase {
 
     public void testNothing() {
     }
