@@ -528,7 +528,7 @@ the name of the resulting class (without suffix). It defaults to <i>java-tmp-dir
   </tr>
   <tr>
     <td valign="top">skipNonTests</td>
-    <td valign="top">Do not pass this class to the JUnit runner if it does not contain any JUnit tests. This prevents non tests from appearing as test errors in test results.</td>
+    <td valign="top">Do not pass this class to the JUnit runner if it does not contain any JUnit tests. This prevents non tests from appearing as test errors in test results.<br />Tests are identified by looking for the @Test annotation on any methods in concrete classes that don't extend junit.framework.TestCase, or for public/protected methods with names startign with 'test' in concrete classes that extend junit.framework.TestCase. This exclusion does not take into account any tests that may be discovered by any other means such as custom JUnit4 runners or over-riding the JUnit3 getTests method.</td>
     <td align="center" valign="top">No. Default is false.</td>
   </tr>
 </table>
@@ -611,7 +611,7 @@ supported.</p>
   </tr>
   <tr>
       <td valign="top">skipNonTests</td>
-      <td valign="top">Do not pass any classes that do not contain JUnit tests to the test runner. This prevents non tests from appearing as test errors in test results.</td>
+      <td valign="top">Do not pass any classes that do not contain JUnit tests to the test runner. This prevents non tests from appearing as test errors in test results.<br />Tests are identified by looking for the @Test annotation on any methods in concrete classes that don't extend junit.framework.TestCase, or for public/protected methods with names startign with 'test' in concrete classes that extend junit.framework.TestCase. This exclusion does not take into account any tests that may be discovered by any other means such as custom JUnit4 runners or over-riding the JUnit3 getTests method.</td>
       <td align="center" valign="top">No. Default is false.</td>
   </tr>
 </table>
