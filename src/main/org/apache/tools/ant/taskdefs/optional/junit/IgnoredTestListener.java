@@ -20,7 +20,6 @@ package org.apache.tools.ant.taskdefs.optional.junit;
 
 import junit.framework.Test;
 import junit.framework.TestListener;
-import org.junit.runner.notification.Failure;
 
 /**
  * Provides the functionality for TestListeners to be able to be notified of
