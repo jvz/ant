@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -182,6 +181,7 @@ public class Jar extends Zip {
         archiveType = "jar";
         emptyBehavior = "create";
         setEncoding("UTF8");
+        setZip64Mode(Zip64ModeAttribute.NEVER);
         rootEntries = new Vector<String>();
     }
 
@@ -353,7 +353,7 @@ public class Jar extends Zip {
                 try {
                     zf.close();
                 } catch (IOException e) {
-                    // XXX - log an error?  throw an exception?
+                    // TODO - log an error?  throw an exception?
                 }
             }
         }
@@ -392,7 +392,7 @@ public class Jar extends Zip {
                 try {
                     zf.close();
                 } catch (IOException e) {
-                    // XXX - log an error?  throw an exception?
+                    // TODO - log an error?  throw an exception?
                 }
             }
         }
@@ -892,7 +892,7 @@ public class Jar extends Zip {
                 log("Building MANIFEST-only jar: "
                     + getDestFile().getAbsolutePath());
             }
-            zOut = new ZipOutputStream(new FileOutputStream(getDestFile()));
+            zOut = new ZipOutputStream(getDestFile());
 
             zOut.setEncoding(getEncoding());
             if (isCompress()) {

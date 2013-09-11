@@ -123,8 +123,7 @@ Note: This document was updated in the context of releasing Ant 1.7.
 
 12. Once this is committed call for a release vote on dev@ant.  The
     vote will only pass if at least three PMC members have voted +1
-    and more +1s than -1s have been cast.  The vote will run for a
-    week.
+    and more +1s than -1s have been cast.  The vote will run for 3 days.
 
 13. Update the files listed at the end of the document (files containing 
     version information) to prepare the development of the next version of Ant
@@ -203,10 +202,10 @@ Note: This document was updated in the context of releasing Ant 1.7.
        login using your Apache credentials
        select the Staging enterprise repository
        expand org.apache.ant 
-       right click the upload that you just did
-       select the context menu entry "Close"
+       select the checkbox next to the upload that you just did
+       click the button "Close" on the top of the table listing the uploads
        once this is done, you have to again select your upload in the web interface,
-       right click, and select the menu entry promote.
+       and click the button "Release".
        4 hours later, the artefacts will be in the maven central repository.
       
 
@@ -233,8 +232,10 @@ Note: This document was updated in the context of releasing Ant 1.7.
     Commit the modified/generated files in the 'production' folder, it will go
     live on ant.apache.org in a matter on seconds.
      
-    Change the version of the manual published on the site: change the URL in the
-    svn:externals of the 'production' folder.
+    Change the version of the manual published on the site: svn copy the manual into
+    the production folder, using a command similar to :
+    svn copy https://svn.apache.org/repos/asf/ant/core/tags/ANT_190/manual/ .
+    followed by a commit.
 
 22. Clean up.
 
