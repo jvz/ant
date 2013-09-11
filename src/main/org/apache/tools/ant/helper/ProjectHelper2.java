@@ -699,7 +699,7 @@ public class ProjectHelper2 extends ProjectHelper {
             // Set the location of the implicit target associated with the project tag
             context.getImplicitTarget().setLocation(new Location(context.getLocator()));
 
-            /** XXX I really don't like this - the XML processor is still
+            /** TODO I really don't like this - the XML processor is still
              * too 'involved' in the processing. A better solution (IMO)
              * would be to create UE for Project and Target too, and
              * then process the tree and have Project/Target deal with
@@ -732,12 +732,10 @@ public class ProjectHelper2 extends ProjectHelper {
                             project.setName(value);
                             project.addReference(value, project);
                         } else if (isInIncludeMode()) {
-                            if (!"".equals(value)
-                                && (getCurrentTargetPrefix() == null
-                                    || getCurrentTargetPrefix().length() == 0)
-                                ) {
+                            if (!"".equals(value) && getCurrentTargetPrefix()!= null && getCurrentTargetPrefix().endsWith(ProjectHelper.USE_PROJECT_NAME_AS_TARGET_PREFIX))  {
+                                String newTargetPrefix = getCurrentTargetPrefix().replace(ProjectHelper.USE_PROJECT_NAME_AS_TARGET_PREFIX, value);
                                 // help nested include tasks
-                                setCurrentTargetPrefix(value);
+                                setCurrentTargetPrefix(newTargetPrefix);
                             }
                         }
                     }
@@ -753,13 +751,13 @@ public class ProjectHelper2 extends ProjectHelper {
                         baseDir = value;
                     }
                 } else {
-                    // XXX ignore attributes in a different NS ( maybe store them ? )
+                    // TODO ignore attributes in a different NS ( maybe store them ? )
                     throw new SAXParseException("Unexpected attribute \"" + attrs.getQName(i)
                                                 + "\"", context.getLocator());
                 }
             }
 
-            // XXX Move to Project ( so it is shared by all helpers )
+            // TODO Move to Project ( so it is shared by all helpers )
             String antFileProp =
                 MagicNames.ANT_FILE + "." + context.getCurrentProjectName();
             String dup = project.getProperty(antFileProp);

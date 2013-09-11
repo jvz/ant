@@ -20,11 +20,13 @@
     <description>
         Build file be able to launch the boostrap build of Ant on every supported platform
     </description>
+    
+    <property name="args" value="allclean test -Dignore.tests.failed=true -Doptional.jars.whenmanifestonly=skip" />
 
-    <condition property="launch.cmd" value="./build.sh">
+    <condition property="launch.cmd" value="${basedir}/build.sh">
         <os family="unix" />
     </condition>
-    <condition property="launch.cmd" value="build.bat">
+    <condition property="launch.cmd" value="${basedir}/build.bat">
         <os family="windows" />
     </condition>
 
@@ -33,7 +35,7 @@
         <!-- by default no args, overridable on the Ant command line with -Dargs="" -->
         <property name="args" value="" />
         <echo message="Launching ${launch.cmd} ${args}" />
-        <exec command="${launch.cmd}" failonerror="true">
+        <exec executable="${launch.cmd}" failonerror="true">
             <arg line="${args}" />
         </exec>
     </target>

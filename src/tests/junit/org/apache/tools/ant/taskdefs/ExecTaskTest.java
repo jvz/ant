@@ -111,6 +111,7 @@ public class ExecTaskTest {
     }
 
     @Ignore("#50507 - fails at least on Linux")
+    /* TODO #50507 - fails at least on Linux */
     public void testOutAndErr() {
         buildRule.getProject().executeTarget("test-out-and-err");
     }
