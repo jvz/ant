@@ -17,34 +17,44 @@
  */
 package org.apache.tools.ant.taskdefs.optional;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.util.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import java.util.Properties;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
+
 /**
  * JUnit Testcase for the optional replaceregexp task.
  *
  */
-public class ReplaceRegExpTest extends BuildFileTest {
+public class ReplaceRegExpTest {
     private static final String PROJECT_PATH = "src/etc/testcases/taskdefs/optional";
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
     
-    public ReplaceRegExpTest(String name) {
-        super(name);
-    }
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
+    @Before
     public void setUp() {
-        configureProject(PROJECT_PATH + "/replaceregexp.xml");
+        buildRule.configureProject(PROJECT_PATH + "/replaceregexp.xml");
     }
 
+    @After
     public void tearDown() {
-        executeTarget("cleanup");
+        buildRule.executeTarget("cleanup");
     }
 
+    @Test
     public void testReplace() throws IOException {
         Properties original = new Properties();
         FileInputStream propsFile = null;
@@ -60,7 +70,7 @@ public class ReplaceRegExpTest extends BuildFileTest {
 
         assertEquals("Def", original.get("OldAbc"));
 
-        executeTarget("testReplace");
+        buildRule.executeTarget("testReplace");
 
         Properties after = new Properties();
         try {
@@ -69,54 +79,61 @@ public class ReplaceRegExpTest extends BuildFileTest {
         } finally {
             if (propsFile != null) {
                 propsFile.close();
-                propsFile = null;
             }
         }
 
         assertNull(after.get("OldAbc"));
         assertEquals("AbcDef", after.get("NewProp"));
     }
+
     // inspired by bug 22541
+    @Test
     public void testDirectoryDateDoesNotChange() {
-        executeTarget("touchDirectory");
-        File myFile = new File(System.getProperty("root"), PROJECT_PATH + "/" + getProject().getProperty("tmpregexp"));
+        buildRule.executeTarget("touchDirectory");
+        File myFile = new File(System.getProperty("root"),
+                PROJECT_PATH + "/" + buildRule.getProject().getProperty("tmpregexp"));
         long timeStampBefore = myFile.lastModified();
-        executeTarget("testDirectoryDateDoesNotChange");
+        buildRule.executeTarget("testDirectoryDateDoesNotChange");
         long timeStampAfter = myFile.lastModified();
         assertEquals("directory date should not change",
             timeStampBefore, timeStampAfter);
     }
+
+    @Test
     public void testDontAddNewline1() throws IOException {
-        executeTarget("testDontAddNewline1");
+        buildRule.executeTarget("testDontAddNewline1");
         assertTrue("Files match",
                    FILE_UTILS
                    .contentEquals(new File(System.getProperty("root"), PROJECT_PATH + "/test.properties"),
                                   new File(System.getProperty("root"), PROJECT_PATH + "/replaceregexp2.result.properties")));
     }
 
+    @Test
     public void testDontAddNewline2() throws IOException {
-        executeTarget("testDontAddNewline2");
+        buildRule.executeTarget("testDontAddNewline2");
         assertTrue("Files match",
                    FILE_UTILS
                    .contentEquals(new File(System.getProperty("root"), PROJECT_PATH + "/test.properties"),
                                   new File(System.getProperty("root"), PROJECT_PATH + "/replaceregexp2.result.properties")));
     }
 
+    @Test
     public void testNoPreserveLastModified() throws Exception {
-        executeTarget("lastModifiedSetup");
-        String tmpdir = project.getProperty("tmpregexp");
+        buildRule.executeTarget("lastModifiedSetup");
+        String tmpdir = buildRule.getProject().getProperty("tmpregexp");
         long ts1 = new File(tmpdir, "test.txt").lastModified();
         Thread.sleep(3000);
-        executeTarget("testNoPreserve");
+        buildRule.executeTarget("testNoPreserve");
         assertTrue(ts1 < new File(tmpdir, "test.txt").lastModified());
     }
 
+    @Test
     public void testPreserveLastModified() throws Exception {
-        executeTarget("lastModifiedSetup");
-        String tmpdir = project.getProperty("tmpregexp");
+        buildRule.executeTarget("lastModifiedSetup");
+        String tmpdir = buildRule.getProject().getProperty("tmpregexp");
         long ts1 = new File(tmpdir, "test.txt").lastModified();
         Thread.sleep(3000);
-        executeTarget("testPreserve");
+        buildRule.executeTarget("testPreserve");
         assertTrue(ts1 == new File(tmpdir, "test.txt").lastModified());
     }
 

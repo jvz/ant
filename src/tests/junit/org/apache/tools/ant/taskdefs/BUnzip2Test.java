@@ -18,43 +18,49 @@
 
 package org.apache.tools.ant.taskdefs;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.util.FileUtils;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 
-/**
- */
-public class BUnzip2Test extends BuildFileTest {
+public class BUnzip2Test {
 
     /** Utilities used for file operations */
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
 
-    public BUnzip2Test(String name) {
-        super(name);
-    }
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
+    @Before
     public void setUp() {
-        configureProject("src/etc/testcases/taskdefs/bunzip2.xml");
-        executeTarget("prepare");
+        buildRule.configureProject("src/etc/testcases/taskdefs/bunzip2.xml");
+        buildRule.executeTarget("prepare");
     }
 
+    @Test
     public void tearDown() {
-        executeTarget("cleanup");
+        buildRule.executeTarget("cleanup");
     }
 
+    @Test
     public void testRealTest() throws java.io.IOException {
         testRealTest("realTest");
     }
 
+    @Test
     public void testRealTestWithResource() throws java.io.IOException {
         testRealTest("realTestWithResource");
     }
 
     private void testRealTest(String target) throws java.io.IOException {
-        executeTarget(target);
+        buildRule.executeTarget(target);
         assertTrue("File content mismatch after bunzip2",
-            FILE_UTILS.contentEquals(project.resolveFile("expected/asf-logo-huge.tar"),
-                                    project.resolveFile("asf-logo-huge.tar")));
+            FILE_UTILS.contentEquals(buildRule.getProject().resolveFile("expected/asf-logo-huge.tar"),
+                                    buildRule.getProject().resolveFile("asf-logo-huge.tar")));
     }
 
     public void testDocumentationClaimsOnCopy() throws java.io.IOException {

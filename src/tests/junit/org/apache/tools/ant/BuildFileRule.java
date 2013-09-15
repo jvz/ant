@@ -107,7 +107,7 @@ public class BuildFileRule extends ExternalResource {
     }
 
     private String cleanBuffer(StringBuffer buffer) {
-        StringBuffer cleanedBuffer = new StringBuffer();
+        StringBuilder cleanedBuffer = new StringBuilder();
         for (int i = 0; i < buffer.length(); i++) {
             char ch = buffer.charAt(i);
             if (ch != '\r') {

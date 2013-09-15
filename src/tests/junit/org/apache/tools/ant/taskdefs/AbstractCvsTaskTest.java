@@ -17,45 +17,54 @@
  */
 package org.apache.tools.ant.taskdefs;
 
+import org.apache.tools.ant.AntAssert;
+import org.apache.tools.ant.BuildFileRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import java.io.File;
 
-import org.apache.tools.ant.BuildFileTest;
+import static org.junit.Assert.assertTrue;
 
 /**
  */
-public class AbstractCvsTaskTest extends BuildFileTest {
+public class AbstractCvsTaskTest {
 
-    public AbstractCvsTaskTest() {
-        this( "AbstractCvsTaskTest" );
-    }
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
-    public AbstractCvsTaskTest(String name) {
-        super(name);
-    }
-
+    @Before
     public void setUp() {
-        configureProject("src/etc/testcases/taskdefs/abstractcvstask.xml");
+        buildRule.configureProject("src/etc/testcases/taskdefs/abstractcvstask.xml");
     }
 
+    @After
     public void tearDown() {
-        executeTarget("cleanup");
+        buildRule.executeTarget("cleanup");
     }
 
+    @Test
     public void testAbstractCvsTask() {
-        executeTarget( "all" );
+        buildRule.executeTarget("all");
     }
 
+    @Test
     public void testPackageAttribute() {
-        File f = getProject().resolveFile("tmpdir/ant/build.xml");
+        File f = buildRule.getProject().resolveFile("tmpdir/ant/build.xml");
         assertTrue("starting empty", !f.exists());
-        expectLogContaining("package-attribute", "U ant/build.xml");
+        buildRule.executeTarget("package-attribute");
+        AntAssert.assertContains("U ant/build.xml", buildRule.getLog());
         assertTrue("now it is there", f.exists());
     }
 
+    @Test
     public void testTagAttribute() {
-        File f = getProject().resolveFile("tmpdir/ant/build.xml");
+        File f = buildRule.getProject().resolveFile("tmpdir/ant/build.xml");
         assertTrue("starting empty", !f.exists());
-        expectLogContaining("tag-attribute", "ANT_141 (revision: 1.175.2.13)");
+        buildRule.executeTarget("tag-attribute");
+        AntAssert.assertContains("ANT_141 (revision: 1.175.2.13)", buildRule.getLog());
         assertTrue("now it is there", f.exists());
     }
 }

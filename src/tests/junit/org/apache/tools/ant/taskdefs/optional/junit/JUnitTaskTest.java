@@ -374,28 +374,29 @@ public class JUnitTaskTest {
         buildRule.executeTarget("testTestMethods");
     }
 
+    @Test
     public void testNonTestsSkipped() throws Exception {
-        executeTarget("testNonTests");
-        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.NonTestMissed.xml").isExists());
-        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3TestMissed.xml").isExists());
-        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.AbstractTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractTestMissed.xml").isExists());
-        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.AbstractJUnit3TestMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractTestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractJUnit3TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3TestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestWithSuiteNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestWithSuiteNotMissed.xml").isExists());
+        buildRule.executeTarget("testNonTests");
+        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.NonTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.NonTestMissed.xml").isExists());
+        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.JUnit3TestMissed.xml").isExists());
+        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.AbstractTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractTestMissed.xml").isExists());
+        assertFalse("Test result should not exist as test was skipped - TEST-org.example.junit.AbstractJUnit3TestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractTestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractJUnit3TestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.TestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3TestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.JUnit3TestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestWithSuiteNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.TestWithSuiteNotMissed.xml").isExists());
 
-        executeTarget("testNonTestsRun");
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.NonTestMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3NonTestMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3TestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3TestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractTestMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractTestNotMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractJUnit3TestMissed.xml", getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", getProject().getResource("out/TEST-org.example.junit.JUnit3NonTestMissed.xml").isExists());
-        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestWithSuiteNotMissed.xml", getProject().getResource("out/TEST-org.example.junit.TestWithSuiteNotMissed.xml").isExists());
+        buildRule.executeTarget("testNonTestsRun");
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.NonTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.NonTestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.JUnit3NonTestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.TestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3TestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.JUnit3TestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractTestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractTestNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractTestNotMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.AbstractJUnit3TestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.AbstractJUnit3TestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.JUnit3NonTestMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.JUnit3NonTestMissed.xml").isExists());
+        assertTrue("Test result should exist as test was not skipped - TEST-org.example.junit.TestWithSuiteNotMissed.xml", buildRule.getProject().getResource("out/TEST-org.example.junit.TestWithSuiteNotMissed.xml").isExists());
 
     }
 

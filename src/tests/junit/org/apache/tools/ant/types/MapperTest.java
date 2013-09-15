@@ -24,6 +24,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.BuildFileTest;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.ChainedMapper;
@@ -31,25 +32,34 @@ import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FlatFileNameMapper;
 import org.apache.tools.ant.util.GlobPatternMapper;
 import org.apache.tools.ant.util.MergingMapper;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
- * JUnit 3 testcases for org.apache.tools.ant.types.Mapper.
+ * JUnit testcases for org.apache.tools.ant.types.Mapper.
  *
  */
 
-public class MapperTest extends TestCase {
+public class MapperTest {
+
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
     private Project project;
 
-    public MapperTest(String name) {
-        super(name);
-    }
-
+    @Before
     public void setUp() {
         project = new Project();
         project.setBasedir(".");
     }
 
+    @Test
     public void testEmptyElementIfIsReference() {
         Mapper m = new Mapper(project);
         m.setFrom("*.java");
@@ -91,6 +101,7 @@ public class MapperTest extends TestCase {
         }
     }
 
+    @Test
     public void testCircularReferenceCheck() {
         Mapper m = new Mapper(project);
         project.addReference("dummy", m);
@@ -143,6 +154,7 @@ public class MapperTest extends TestCase {
         assertEquals("a.class", result[0]);
     }
 
+    @Test
     public void testNested() {
         Mapper mapper1 = new Mapper(project);
         Mapper.MapperType mt = new Mapper.MapperType();
@@ -174,6 +186,7 @@ public class MapperTest extends TestCase {
             list.contains("mergefile"));
     }
 
+    @Test
     public void testChained() {
 
         // a --> b --> c --- def
@@ -216,31 +229,11 @@ public class MapperTest extends TestCase {
         assertTrue("cannot find expected target \"ghi\"", list.contains("ghi"));
     }
 
+    @Test
     public void testCopyTaskWithTwoFilesets() {
-        TaskdefForCopyTest t = new TaskdefForCopyTest("test1");
-        try {
-            t.setUp();
-            t.test1();
-        } finally {
-            t.tearDown();
-        }
+        buildRule.configureProject("src/etc/testcases/types/mapper.xml");
+        buildRule.executeTarget("test1");
+        buildRule.executeTarget("cleanup");
     }
 
-    private class TaskdefForCopyTest extends BuildFileTest {
-        TaskdefForCopyTest(String name) {
-            super(name);
-        }
-
-        public void setUp() {
-            configureProject("src/etc/testcases/types/mapper.xml");
-        }
-
-        public void tearDown() {
-            executeTarget("cleanup");
-        }
-
-        public void test1() {
-            executeTarget("test1");
-        }
-    }
 }

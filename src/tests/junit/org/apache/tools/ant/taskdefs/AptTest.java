@@ -18,60 +18,74 @@
 
  package org.apache.tools.ant.taskdefs;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.AntAssert;
+import org.apache.tools.ant.BuildFileRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 /**
  */
-public class AptTest extends BuildFileTest {
-    public AptTest(String name) {
-        super(name);
-    }
+public class AptTest {
 
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
+
+    @Before
     public void setUp() {
-        configureProject("src/etc/testcases/taskdefs/apt.xml");
+        buildRule.configureProject("src/etc/testcases/taskdefs/apt.xml");
     }
 
     /**
      * Tears down the fixture, for example, close a network connection. This
      * method is called after a test is executed.
      */
-    protected void tearDown() throws Exception {
-        executeTarget("clean");
+    @After
+    public void tearDown() throws Exception {
+        buildRule.executeTarget("clean");
     }
 
+    @Test
     public void testApt() {
-        executeTarget("testApt");
+        buildRule.executeTarget("testApt");
     }
 
+    @Test
     public void testAptFork() {
-        executeTarget("testAptFork");
+        buildRule.executeTarget("testAptFork");
     }
- 
+
+    @Test
     public void testAptForkFalse() {
-        executeTarget("testAptForkFalse");
-        assertLogContaining(Apt.WARNING_IGNORING_FORK);
+        buildRule.executeTarget("testAptForkFalse");
+        AntAssert.assertContains(Apt.WARNING_IGNORING_FORK, buildRule.getLog());
     }
 
+    @Test
     public void testListAnnotationTypes() {
-        executeTarget("testListAnnotationTypes");
-        assertLogContaining("Set of annotations found:");
-        assertLogContaining("Distributed");
+        buildRule.executeTarget("testListAnnotationTypes");
+
+        AntAssert.assertContains("Set of annotations found:", buildRule.getLog());
+        AntAssert.assertContains("Distributed", buildRule.getLog());
     }
 
+    @Test
     public void testAptNewFactory() {
-        executeTarget("testAptNewFactory");
+        buildRule.executeTarget("testAptNewFactory");
         assertProcessed();
     }
 
+    @Test
     public void testAptNewFactoryFork() {
-        executeTarget("testAptNewFactoryFork");
+        buildRule.executeTarget("testAptNewFactoryFork");
         assertProcessed();
     }
     
     private void assertProcessed() {
-        assertLogContaining("DistributedAnnotationProcessor-is-go");
-        assertLogContaining("[-Abuild.dir=");
-        assertLogContaining("visiting DistributedAnnotationFactory");
+        AntAssert.assertContains("DistributedAnnotationProcessor-is-go", buildRule.getLog());
+        AntAssert.assertContains("[-Abuild.dir=", buildRule.getLog());
+        AntAssert.assertContains("visiting DistributedAnnotationFactory", buildRule.getLog());
     }
 }
 

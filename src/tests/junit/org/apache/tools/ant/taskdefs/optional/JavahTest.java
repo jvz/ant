@@ -17,34 +17,43 @@
  */
 package org.apache.tools.ant.taskdefs.optional;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.BuildFileRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
-public class JavahTest extends BuildFileTest {
+import static org.junit.Assert.assertTrue;
+
+public class JavahTest {
 
     private final static String BUILD_XML = 
         "src/etc/testcases/taskdefs/optional/javah/build.xml";
 
-    public JavahTest(String name) {
-        super(name);
-    }
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
 
+    @Before
     public void setUp() {
-        configureProject(BUILD_XML);
+        buildRule.configureProject(BUILD_XML);
     }
 
+    @After
     public void tearDown() {
-        executeTarget("tearDown");
+        buildRule.executeTarget("tearDown");
     }
 
+    @Test
     public void testSimpleCompile() {
-        executeTarget("simple-compile");
-        assertTrue(getProject().resolveFile("output/org_example_Foo.h")
+        buildRule.executeTarget("simple-compile");
+        assertTrue(buildRule.getProject().resolveFile("output/org_example_Foo.h")
                    .exists());
     }
 
+    @Test
     public void testCompileFileset() {
-        executeTarget("test-fileset");
-        assertTrue(getProject().resolveFile("output/org_example_Foo.h")
+        buildRule.executeTarget("test-fileset");
+        assertTrue(buildRule.getProject().resolveFile("output/org_example_Foo.h")
                    .exists());
     }
 }

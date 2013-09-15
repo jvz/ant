@@ -19,12 +19,21 @@ package org.apache.tools.ant.taskdefs.optional;
 
 import java.io.File;
 
-import org.apache.tools.ant.BuildFileTest;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.BuildFileRule;
 import org.apache.tools.ant.taskdefs.optional.jsp.Jasper41Mangler;
 import org.apache.tools.ant.taskdefs.optional.jsp.JspMangler;
 import org.apache.tools.ant.taskdefs.optional.jsp.JspNameMangler;
 import org.apache.tools.ant.taskdefs.optional.jsp.compilers.JspCompilerAdapter;
 import org.apache.tools.ant.taskdefs.optional.jsp.compilers.JspCompilerAdapterFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests the Jspc task.
@@ -32,69 +41,42 @@ import org.apache.tools.ant.taskdefs.optional.jsp.compilers.JspCompilerAdapterFa
  * @created 07 March 2002
  * @since Ant 1.5
  */
-public class JspcTest extends BuildFileTest {
-    /**
-     * Description of the Field
-     */
-    private File baseDir;
-    /**
-     * Description of the Field
-     */
-    private File outDir;
+public class JspcTest {
 
-    /**
-     * Description of the Field
-     */
+    private File outDir;
     private final static String TASKDEFS_DIR = "src/etc/testcases/taskdefs/optional/";
 
 
-    /**
-     * Constructor for the JspcTest object
-     *
-     * @param name Description of Parameter
-     */
-    public JspcTest(String name) {
-        super(name);
-    }
-
-
-    /**
-     * The JUnit setup method
-     */
+    @Rule
+    public BuildFileRule buildRule = new BuildFileRule();
+    
+    @Before
     public void setUp() {
-        configureProject(TASKDEFS_DIR + "jspc.xml");
-        baseDir = new File(System.getProperty("root"), TASKDEFS_DIR);
+        buildRule.configureProject(TASKDEFS_DIR + "jspc.xml");
+        File baseDir = new File(System.getProperty("root"), TASKDEFS_DIR);
         outDir = new File(baseDir, "jsp/java");
     }
 
 
-    /**
-     * The teardown method for JUnit
-     */
+    @After
     public void tearDown() {
-        executeTarget("cleanup");
+        buildRule.executeTarget("cleanup");
     }
 
 
-    /**
-     * A unit test for JUnit
-     */
-    public void testSimple() throws Exception {
+    @Test
+    public void testSimple() {
         executeJspCompile("testSimple", "simple_jsp.java");
     }
 
 
-    /**
-     * A unit test for JUnit
-     */
+    @Test
     public void testUriroot() throws Exception {
         executeJspCompile("testUriroot", "uriroot_jsp.java");
     }
 
 
-    /**
-     * A unit test for JUnit
-     */
+    @Test
     public void testXml() throws Exception {
         executeJspCompile("testXml", "xml_jsp.java");
     }
@@ -103,6 +85,7 @@ public class JspcTest extends BuildFileTest {
     /**
      * try a keyword in a file
      */
+    @Test
     public void testKeyword() throws Exception {
         executeJspCompile("testKeyword", "default_jsp.java");
     }
@@ -111,30 +94,30 @@ public class JspcTest extends BuildFileTest {
     /**
      * what happens to 1nvalid-classname
      */
+    @Test
     public void testInvalidClassname() throws Exception {
         executeJspCompile("testInvalidClassname",
                 "_1nvalid_0002dclassname_jsp.java");
     }
 
 
-    /**
-     * A unit test for JUnit
-     */
+    @Test
     public void testNoTld() throws Exception {
 //         expectBuildExceptionContaining("testNoTld",
 //                 "Jasper found an error in a file",
 //                 "Java returned: 9");
-         expectBuildExceptionContaining("testNoTld",
-                 "not found",
-                 "Java returned: 9");
+        try {
+            buildRule.executeTarget("testNoTld");
+            fail("Not found");
+        } catch (BuildException ex) {
+            assertEquals("Java returned: 9", ex.getMessage());
+        }
     }
 
 
-    /**
-     * A unit test for JUnit
-     */
+    @Test
     public void testNotAJspFile()  throws Exception {
-        executeTarget("testNotAJspFile");
+        buildRule.executeTarget("testNotAJspFile");
     }
 
     /**
@@ -151,11 +134,9 @@ public class JspcTest extends BuildFileTest {
      *
      * @param target Description of Parameter
      * @param javafile Description of Parameter
-     * @exception Exception trouble
      */
-    protected void executeJspCompile(String target, String javafile)
-        throws Exception {
-        executeTarget(target);
+    protected void executeJspCompile(String target, String javafile) {
+        buildRule.executeTarget(target);
         assertJavaFileCreated(javafile);
     }
 
@@ -164,10 +145,8 @@ public class JspcTest extends BuildFileTest {
      * verify that a named file was created
      *
      * @param filename Description of Parameter
-     * @exception Exception trouble
      */
-    protected void assertJavaFileCreated(String filename)
-        throws Exception {
+    protected void assertJavaFileCreated(String filename) {
         File file = getOutputFile(filename);
         assertTrue("file " + filename + " not found", file.exists());
         assertTrue("file " + filename + " is empty", file.length() > 0);
@@ -186,6 +165,7 @@ public class JspcTest extends BuildFileTest {
     /**
      * verify that we select the appropriate mangler
      */
+    @Test
     public void testJasperNameManglerSelection() {
         JspCompilerAdapter adapter=
                 JspCompilerAdapterFactory.getCompiler("jasper", null,null);
@@ -196,6 +176,7 @@ public class JspcTest extends BuildFileTest {
         assertTrue(mangler instanceof Jasper41Mangler);
     }
 
+    @Test
     public void testJasper41() {
         JspMangler mangler = new Jasper41Mangler();
         //java keywords are not special

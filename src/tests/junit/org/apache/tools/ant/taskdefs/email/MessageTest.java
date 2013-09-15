@@ -29,7 +29,7 @@ import org.junit.After;
 import org.junit.Test;
 
 public class MessageTest {
-    private File f = new File(System.getProperty("java.io.tmpdir"),
+    private static final File f = new File(System.getProperty("java.io.tmpdir"),
                               "message.txt");
     /**
      * test for bugzilla 48932
