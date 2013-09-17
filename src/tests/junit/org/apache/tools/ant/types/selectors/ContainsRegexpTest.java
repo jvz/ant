@@ -24,21 +24,21 @@ import junit.framework.TestCase;
 
 import org.apache.tools.ant.BuildFileTest;
 import org.apache.tools.ant.Project;
+import org.junit.Before;
+import org.junit.Test;
 
 
-public class ContainsRegexpTest extends TestCase {
+public class ContainsRegexpTest {
 
     private Project project;
 
-    public ContainsRegexpTest(String name) {
-        super(name);
-    }
-
+    @Before
     public void setUp() {
         project = new Project();
         project.setBasedir(".");
     }
 
+    @Test
     public void testContainsRegexp() {
         TaskdefForRegexpTest MyTask =
             new TaskdefForRegexpTest("containsregexp");
